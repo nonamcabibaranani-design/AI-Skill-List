@@ -1,56 +1,48 @@
-# Quy ước tham khảo từ payment-merchant-management
+# Quy tắc chung cho project Java
 
-Chỉ đọc các phần liên quan khi làm việc với project này. Mã nguồn hiện tại là nguồn xác nhận cuối cùng; các ví dụ dưới đây không phải cấu trúc bắt buộc cho mọi project Java và không cố định phiên bản công nghệ.
+Áp dụng các quy tắc dưới đây theo yêu cầu và kiến trúc của project hiện tại. Đọc cấu hình build, code liên quan và quy ước của repository trước khi sửa; không mặc định phiên bản Java, framework, tên package hay mô hình nghiệp vụ.
 
-Các đường dẫn Java bên dưới tính từ `src/main/java/com/epayjsc/merchantmanagement/` của repository gốc.
+## Cấu trúc và trách nhiệm
 
-## Cấu trúc và luồng nghiệp vụ
+- Đặt class trong package hoặc module sở hữu trách nhiệm của nó. Theo cách tổ chức hiện có theo domain hoặc theo tầng; tránh đưa code riêng của một nghiệp vụ vào package dùng chung.
+- Với ứng dụng phân tầng, controller hoặc entry point tiếp nhận đầu vào và chuyển cho tầng xử lý nghiệp vụ; repository hoặc lớp truy cập dữ liệu phụ trách persistence. Với kiến trúc khác, giữ ranh giới tương ứng của project.
+- Tái sử dụng component và cơ chế dependency injection đang có. Khi có nhiều implementation, kiểm tra cách chọn dependency, vòng đời và cấu hình đăng ký; không dựa vào tên class để suy đoán implementation thực tế.
+- Chỉ tách interface, base class hoặc module dùng chung khi có nhu cầu cụ thể. Ưu tiên cấu trúc nhỏ nhất giải quyết được yêu cầu.
 
-- Các domain chính: `domain/payment_core`, `domain/qr_gateway`, `domain/bill_service_hub`. Có cả controller, service, DTO và mapper dùng chung ở package gốc. Đặt thay đổi gần nghiệp vụ sở hữu nó và theo vị trí của các lớp liên quan đang có.
-- Luồng đơn giản để tham khảo: `domain/bill_service_hub/controller/BshTransactionController.java` → `domain/bill_service_hub/service/BshTransactionService.java` → `domain/bill_service_hub/service/impl/BshTransactionServiceImpl.java`. Controller dùng constructor injection và chuyển xử lý sang service.
-- Luồng xử lý QR: `domain/qr_gateway/controller/QrProcessTransactionController.java` dùng service được chọn bằng qualifier; `domain/qr_gateway/service/processTransaction/QrProcessTransactionServiceImpl.java` mở rộng các hook của service xử lý chung. Kiểm tra implementation và bean name khi thêm hoặc thay service.
-- Repository tùy biến triển khai ở package `repository/impl`. Ví dụ `domain/qr_gateway/repository/impl/QrProcessTransactionCustomRepoImpl.java` đọc truy vấn dữ liệu/truy vấn đếm, bind parameter và trả kết quả phân trang. Theo đường dẫn resource trong code để tìm SQL liên quan.
+## Chọn và mở rộng design pattern
 
-## Pattern đang có
-
-- `service/process_transaction/IProcessTransactionStrategy.java`: hợp đồng của strategy, gồm điều kiện hỗ trợ và các nhánh xử lý payment/refund.
-- `service/process_transaction/ProcessTransactionStrategyFactory.java`: nhận danh sách strategy qua constructor injection. Chọn theo `serviceCode`, `type` và ở overload liên quan có thêm `proxyTransactionType`. Kết quả phải khớp đúng một strategy; không khớp hoặc khớp nhiều đều là lỗi. Giữ nguyên ý nghĩa hai overload khi sửa luồng chọn.
-- `service/process_transaction/ProcessTransPlanRegistry.java`: đăng ký service theo `serviceCode`. Luồng hiện tại có fallback khi service code thiếu và báo lỗi khi không tìm được domain hỗ trợ. Chỉ thay fallback khi nghiệp vụ yêu cầu.
-- Các strategy của từng domain ở `domain/<domain>/service/processTransaction/`. Khi thêm một cách xử lý thật sự mới vào luồng này, cân nhắc mở rộng strategy hiện có thay vì bổ sung nhiều điều kiện ở controller.
-- Các hook của service xử lý chung là ví dụ Template Method. Chỉ mở rộng base class khi thao tác mới vẫn phù hợp hợp đồng và thứ tự xử lý của nó.
+- Bắt đầu bằng cách triển khai trực tiếp. Dùng pattern khi nó giải quyết sự lặp lại hoặc biến thể đã tồn tại; không thêm pattern chỉ để chuẩn bị cho nhu cầu giả định.
+- Với Strategy, xác định điều kiện chọn và cách xử lý trường hợp không khớp hoặc khớp nhiều implementation theo hợp đồng nghiệp vụ. Không tự đổi thứ tự ưu tiên hoặc fallback của cơ chế hiện có.
+- Với Factory hoặc registry, kiểm tra khóa tra cứu, quy tắc đăng ký và xử lý khóa không hợp lệ. Giữ cấu hình nhất quán với nơi sử dụng.
+- Với Template Method, chỉ mở rộng khi luồng mới phù hợp hợp đồng, thứ tự xử lý và các hook của base class. Nếu không phù hợp, chọn cách triển khai độc lập thay vì ép kế thừa.
 
 ## Persistence và transaction
 
-| Domain cấu hình | Persistence unit | Transaction manager |
-| --- | --- | --- |
-| Payment core | `paymentCore` | `merchantManagementPlatformTransactionManager` |
-| QR gateway | `qrGateway` | `qrGatewayPlatformTransactionManager` |
-| Bill service hub | `billServiceHub` | `billServiceHubPlatformTransactionManager` |
-
-Kiểm tra lại `config/datasource/PaymentCoreDBConfig.java`, `QrGatewayDBConfig.java` và `BillServiceHubDBConfig.java` khi thay đổi persistence. Payment core được cấu hình primary; điều đó không có nghĩa mọi thao tác ghi đều thuộc payment core.
-
-`domain/qr_gateway/repository/impl/QrProcessTransactionCustomRepoImpl.java` dùng `@PersistenceContext(unitName = "paymentCore")`. Đây là ví dụ cho thấy package QR và nơi lưu dữ liệu có thể khác nhau. Lần theo repository và entity trước khi chọn transaction manager cho use case.
-
-`domain/bill_service_hub/repository/BaseBshCustomRepository.java` chứa cách bind parameter và tính phân trang theo request của module. Đọc cả cặp truy vấn dữ liệu/đếm khi sửa bộ lọc; giữ quy ước page number của contract hiện tại.
+- Lần theo entity, repository và cấu hình để xác định dữ liệu thuộc nguồn nào. Trong ứng dụng có nhiều datasource, chọn đúng persistence context và transaction manager; không suy ra từ tên API hoặc domain gọi vào.
+- Xác định ranh giới transaction theo thao tác cần nhất quán. Kiểm tra hành vi commit, rollback, propagation và lời gọi qua proxy nếu framework sử dụng chúng.
+- Không giả định một transaction cục bộ bao phủ nhiều datasource hoặc dịch vụ bên ngoài. Khi yêu cầu cần phối hợp các tài nguyên đó, xác minh cơ chế hiện có và đề xuất thay đổi trong phạm vi được chấp thuận.
+- Bind parameter khi tạo truy vấn. Với tìm kiếm và phân trang, giữ điều kiện lọc nhất quán giữa truy vấn dữ liệu và truy vấn đếm; kiểm tra thứ tự sắp xếp, số trang, kích thước trang và tổng bản ghi theo contract.
+- Giữ các ràng buộc và cơ chế xử lý đồng thời mà nghiệp vụ đang dựa vào. Chỉ thêm hoặc đổi locking, retry và cơ chế chống xử lý trùng khi đã có yêu cầu hoặc phương án được chấp thuận.
 
 ## DTO, response, exception và mapping
 
-- Project sử dụng `Ret`, `Rets` từ thư viện nội bộ `com.epayjsc.lib`. Tái sử dụng cách trả kết quả của luồng đang sửa thay vì thêm response envelope mới.
-- `common/SearchResult.java` có `data` và `totalData`; giữ hợp đồng đếm tổng khi sửa tìm kiếm/phân trang.
-- `exception/BusinessException.java`, `ExceptionEnum.java` và `GlobalExceptionHandler.java` là điểm kiểm tra mã lỗi. Handler hiện tại trả response nghiệp vụ/bean validation với HTTP OK, còn lỗi upload quá dung lượng có trạng thái riêng. Không thay trạng thái HTTP như một phần phụ của refactor.
-- DTO có cả dạng dùng chung ở `dto/` và dạng nằm trong domain. Ví dụ `dto/processTrans/ProcessTransCreateReq.java` chứa các trường phân biệt loại giao dịch và thông tin đối soát. Theo caller và JSON contract khi thay trường.
-- `mapper/MapperStruct.java`, `CollectionTransMapper.java` và `DisbursementTransMapper.java` sử dụng MapStruct với component model của Spring. Sửa interface mapper và annotation, không sửa file implementation được sinh ra trong thư mục build.
-- Đọc `pom.xml` để xác định dependency, annotation processor và mức tương thích hiện tại. Với namespace persistence/validation/servlet, theo cấu hình và import đang dùng trong module; không tự thực hiện migration namespace.
+- Theo hợp đồng dữ liệu đang được caller sử dụng: tên trường, kiểu dữ liệu, nullability, giá trị mặc định, serialization và cấu trúc phân trang. Xem cả nơi tạo và nơi đọc dữ liệu trước khi sửa.
+- Dùng cơ chế response và xử lý lỗi của project. Khi refactor, giữ ý nghĩa mã lỗi, HTTP status nếu có, thông điệp và cách ánh xạ exception; thay đổi hành vi phải nằm trong phạm vi được chấp thuận.
+- Đặt validation ở ranh giới phù hợp với trách nhiệm của module. Phân biệt đầu vào không hợp lệ, lỗi nghiệp vụ và lỗi hạ tầng theo quy ước hiện có.
+- Khi dùng thư viện sinh mapper hoặc code, sửa nguồn khai báo và cấu hình; không sửa trực tiếp file sinh ra trong thư mục build.
+- Đọc cấu hình build để xác định dependency, annotation processor và namespace đang dùng. Không tự nâng phiên bản hoặc migration framework trong một thay đổi không yêu cầu việc đó.
 
-## Hợp đồng dữ liệu và xử lý giao dịch
+## Kiểu dữ liệu và tính đúng nghiệp vụ
 
-- `domain/payment_core/entity/TransPayment.java` có các trường tiền/fee dạng `Long`; `domain/bill_service_hub/entity/TransPaymentEntity.java` sử dụng `BigDecimal`. Giữ đơn vị và quy tắc của từng trường; không áp một kiểu dữ liệu chung cho mọi domain.
-- Entity có thể dùng `Date`, còn DTO tìm kiếm nhận chuỗi thời gian và repository chuyển đổi theo format hiện có. Kiểm tra format, timezone và ranh giới lọc ở use case liên quan trước khi sửa.
-- `utils/SecurityUtils.java` lấy thông tin người dùng từ security context. Luồng phê duyệt trong service xử lý chung kiểm tra trạng thái được phép và người phê duyệt trước khi ghi dữ liệu, đồng thời cập nhật lịch sử/thông báo. Giữ đủ các bước nghiệp vụ có liên quan.
-- Dùng những ví dụ trên để tìm code đúng vị trí, không sao chép nguyên phương thức lớn, comment thừa hoặc logging payload vào phần mới.
+- Với tiền, số lượng và tỷ lệ, xác định đơn vị, độ chính xác, scale và quy tắc làm tròn. Dùng kiểu phù hợp với contract, như số nguyên theo đơn vị nhỏ nhất hoặc `BigDecimal`; tránh sai số dấu phẩy động trong phép tính yêu cầu độ chính xác thập phân.
+- Với ngày giờ, làm rõ đó là thời điểm tuyệt đối, ngày lịch hay giờ địa phương. Giữ format, timezone và ranh giới khoảng lọc nhất quán giữa API, xử lý nghiệp vụ và nơi lưu trữ.
+- Lấy danh tính và quyền từ cơ chế xác thực được project tin cậy. Kiểm tra điều kiện chuyển trạng thái và quyền thao tác ở nơi thực thi nghiệp vụ.
+- Khi sửa một luồng, rà cả các tác động liên quan như lịch sử, audit, sự kiện và thông báo. Giữ tính nhất quán của các bước đã có; không tự bổ sung tác động mới ngoài yêu cầu.
+- Log đủ để chẩn đoán và theo dõi luồng. Không ghi credential, token hoặc payload chứa dữ liệu nhạy cảm vào log.
 
-## Kiểm tra production code
+## Kiểm tra và bàn giao
 
-Repository có Maven wrapper. Dùng compile phù hợp khi thay Java; dependency nội bộ `com.epayjsc:epay-lib` có thể cần repository hoặc cache đã được cấu hình trong môi trường. Không thay dependency này bằng thư viện khác chỉ để compile thành công.
-
-Quy tắc của người dùng vẫn áp dụng: chỉ thêm file test hoặc bổ sung test khi được yêu cầu rõ ràng. Đọc lại quy tắc đầy đủ ở `../SKILL.md` trước khi thực hiện bước kiểm tra.
+- Đọc build file và dùng wrapper hoặc công cụ đã có để kiểm tra phần thay đổi. Chọn lệnh theo module, build system và môi trường thực tế.
+- Nếu thiếu JDK, dependency hoặc tài nguyên môi trường, báo rõ phần chưa kiểm chứng. Không thay thư viện hoặc nâng phiên bản chỉ để làm build thành công.
+- Chỉ thêm file test hoặc bổ sung test khi người dùng yêu cầu rõ ràng. Có thể chạy test hiện có để xác minh theo yêu cầu của project; xem đầy đủ quy tắc tại [SKILL.md](../SKILL.md).
+- Kiểm tra diff, caller và các hợp đồng bị ảnh hưởng; báo ngắn thay đổi, cách đã kiểm tra và giới hạn còn lại.

@@ -5,7 +5,7 @@ description: "Viết, sửa và refactor code Java theo cấu trúc project đan
 
 # Java Code
 
-Áp dụng khi triển khai, sửa lỗi hoặc refactor Java. Các quy ước tham khảo được rút ra từ project `payment-merchant-management`; đọc cấu hình và code hiện tại trước khi áp dụng sang project khác.
+Áp dụng khi triển khai, sửa lỗi hoặc refactor Java. Dùng các quy tắc chung theo yêu cầu, cấu hình và kiến trúc của project hiện tại; không mặc định phiên bản Java, framework hoặc mô hình nghiệp vụ.
 
 ## Yêu cầu của người dùng
 
@@ -24,8 +24,8 @@ description: "Viết, sửa và refactor code Java theo cấu trúc project đan
 
 1. Đọc hướng dẫn áp dụng cho repository, trạng thái thay đổi hiện tại và file build liên quan (`pom.xml`, cấu hình Gradle hoặc tương đương).
 2. Xác định domain/use case cần sửa; lần theo một luồng tương tự từ đầu vào đến service, repository và dữ liệu trả về. Đọc thêm các caller khi thay đổi contract dùng chung.
-3. Khi làm trong `payment-merchant-management`, đọc [quy ước project](references/project-conventions.md) ở những phần liên quan. Các đường dẫn và tên bean trong tài liệu là điểm bắt đầu tra cứu; kiểm tra lại mã nguồn hiện tại.
-4. Với project khác, lấy package, dependency injection, xử lý lỗi và persistence từ project đó. Chỉ mang theo các nguyên tắc và sở thích của người dùng; không sao chép tên package hoặc kiến trúc nghiệp vụ của project mẫu.
+3. Đọc các phần liên quan trong [quy tắc chung cho project Java](references/project-conventions.md), rồi đối chiếu với cấu hình và mã nguồn hiện tại trước khi áp dụng.
+4. Theo cách tổ chức package, dependency injection, xử lý lỗi và persistence của module đang sửa. Áp dụng nguyên tắc và sở thích của người dùng trong phạm vi yêu cầu; không áp đặt kiến trúc hoặc công nghệ khác lên project.
 
 ## Chia package theo trách nhiệm
 
@@ -64,7 +64,7 @@ Với ít nhánh xử lý ổn định, một hàm rõ ràng hoặc điều ki�
 ## Kiểm tra và bàn giao
 
 - Xem diff và kiểm tra compile/build phù hợp với phần thay đổi bằng wrapper/công cụ đã có. Kiểm tra import, caller, mapping, branch nghiệp vụ và dependency injection liên quan.
-- Với project mẫu dùng Maven, có thể kiểm tra production code bằng `./mvnw -DskipTests compile` hoặc PowerShell `./mvnw.cmd -DskipTests compile`. Với project khác, chọn lệnh theo build hiện tại; không sửa build chỉ để áp dụng lệnh mẫu.
+- Nếu project dùng Maven wrapper, có thể kiểm tra production code bằng `./mvnw -DskipTests compile` hoặc PowerShell `./mvnw.cmd -DskipTests compile`. Với build system khác, chọn lệnh tương ứng từ cấu hình và wrapper hiện có; không sửa build chỉ để áp dụng lệnh mẫu.
 - Có thể chạy test đã tồn tại nếu cần xác minh hoặc có yêu cầu của project; việc đó không cho phép tự tạo hoặc sửa test. Khi người dùng yêu cầu thêm test, chỉ thêm phạm vi test đã được yêu cầu.
 - Nếu thiếu JDK, dependency nội bộ hoặc tài nguyên môi trường, nêu đúng nguyên nhân và phần chưa xác minh. Không tự nâng phiên bản hoặc thay thư viện nội bộ để làm build chạy qua.
 - Báo cáo ngắn gọn thay đổi chính, cách đã kiểm tra và giới hạn còn lại. Không khẳng định đã kiểm tra thành công nếu chưa chạy hoặc lệnh thất bại.
