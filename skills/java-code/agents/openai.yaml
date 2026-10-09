@@ -1,0 +1,6 @@
+interface:
+  display_name: "Java Code"
+  short_description: "Code Java đơn giản, đúng package và theo project"
+  default_prompt: "Dùng $java-code để triển khai yêu cầu Java theo project hiện tại: code đơn giản, package đúng trách nhiệm, design pattern phù hợp, chỉ comment khi cần và chỉ thêm test khi tôi yêu cầu."
+policy:
+  allow_implicit_invocation: true
