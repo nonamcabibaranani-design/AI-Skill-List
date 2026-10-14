@@ -46,6 +46,7 @@ Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Cá
 | [superpowers](https://github.com/obra/superpowers) | `brainstorming`, `systematic-debugging`, `test-driven-development`, ... | [README](https://github.com/obra/superpowers#readme) · [Cài cho Codex](https://github.com/obra/superpowers/blob/main/.codex/INSTALL.md) |
 | [impeccable](https://github.com/pbakaus/impeccable) | Thiết kế, review và cải thiện giao diện | [README](https://github.com/pbakaus/impeccable#readme) |
 | [vercel-skills](https://github.com/vercel-labs/skills) | `find-skills`; CLI khám phá và cài skill | [README](https://github.com/vercel-labs/skills#readme) |
+| [Agent Memory](https://github.com/rohitg00/agentmemory) | Bộ nhớ lâu dài qua MCP; `memory-discipline`, `recall`, `remember`, `forget` | [Cài dịch vụ](https://github.com/rohitg00/agentmemory#install) · [Cài skills và kết nối agent](https://github.com/rohitg00/agentmemory#other-agents) |
 
 ### Cài từng skill bằng Skills CLI
 
@@ -75,6 +76,30 @@ npx impeccable install --providers=codex --scope=project
 ```
 
 Sau đó chạy `/impeccable init` trong AI coding tool theo [hướng dẫn Impeccable](https://github.com/pbakaus/impeccable#readme).
+
+### Agent Memory: dịch vụ MCP và skills
+
+Agent Memory lưu và tìm lại quyết định, bối cảnh và bài học giữa các phiên làm việc. Cần **dịch vụ bộ nhớ đang chạy**, **kết nối MCP của agent** và **skills hướng dẫn cách đọc/lưu**; chỉ cài skills không thay thế hai phần đầu.
+
+Cần Node.js **20 trở lên** cùng npm/npx. Chạy trình thiết lập chính thức:
+
+```bash
+npx -y @agentmemory/agentmemory@latest
+```
+
+Làm theo [hướng dẫn upstream](https://github.com/rohitg00/agentmemory#other-agents) để kết nối MCP cho agent đang dùng. Trên Windows native, cần cài thủ công `iii-engine` đúng phiên bản upstream chỉ định; xem [điều kiện cài đặt](https://github.com/rohitg00/agentmemory#install) trước khi chạy.
+
+Liệt kê skills rồi cài riêng bộ cơ bản cho Codex hoặc Antigravity:
+
+```bash
+npx skills add rohitg00/agentmemory --list
+npx skills add rohitg00/agentmemory --skill memory-discipline --skill recall --skill remember --skill forget -a codex -g
+npx skills add rohitg00/agentmemory --skill memory-discipline --skill recall --skill remember --skill forget -a antigravity -g
+```
+
+`memory-discipline` hướng dẫn đọc bộ nhớ trước khi làm việc và lưu quyết định đã xác minh; `recall` tìm lại, `remember` lưu thêm, `forget` xóa ghi chú theo yêu cầu. Nếu dùng Antigravity CLI, thay `antigravity` bằng `antigravity-cli` theo [danh sách agent của Skills CLI](https://github.com/vercel-labs/skills#supported-agents).
+
+Để Codex và Antigravity dùng chung bộ nhớ, cấu hình cả hai kết nối cùng một dịch vụ và dùng mã project nhất quán. Việc tự ghi/đọc còn phụ thuộc cấu hình và hooks của từng agent; kiểm tra bằng cách lưu một ghi chú rồi đọc lại từ agent còn lại. Repo này chỉ lưu hướng dẫn, không chứa dữ liệu bộ nhớ hay cấu hình riêng của máy.
 
 ## Cập nhật và đóng góp
 
