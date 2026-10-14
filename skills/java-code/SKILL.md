@@ -1,6 +1,6 @@
 ---
 name: java-code
-description: "Viết, sửa và refactor code Java theo cấu trúc project đang mở; ưu tiên code đơn giản, package đúng trách nhiệm và design pattern phù hợp. Dùng cho yêu cầu triển khai Java, không cố định phiên bản Java hay framework. Chỉ thêm test khi người dùng yêu cầu rõ ràng."
+description: "Viết, sửa và refactor code Java theo cấu trúc project đang mở; ưu tiên code đơn giản, dễ mở rộng, package đúng trách nhiệm và design pattern phù hợp. Dùng cho yêu cầu triển khai Java, không cố định phiên bản Java hay framework. Chỉ thêm test khi người dùng yêu cầu rõ ràng."
 ---
 
 # Java Code
@@ -16,6 +16,7 @@ description: "Viết, sửa và refactor code Java theo cấu trúc project đan
 - **Chỉ tạo file test hoặc bổ sung test khi người dùng yêu cầu rõ ràng.** Yêu cầu code, sửa bug, refactor, kiểm tra hay build không tự động cho phép thêm test. Không tự sinh test class, test fixture hoặc thêm dependency phục vụ test. Giữ nguyên các test đang có, trừ khi người dùng yêu cầu chỉnh sửa chúng.
 - **Không gắn skill với phiên bản cụ thể.** Xác định Java, framework, dependency, namespace và build tool từ project đang mở. Dùng cú pháp/API tương thích với cấu hình đó; chỉ nâng cấp khi nằm trong yêu cầu của người dùng.
 - **Ưu tiên code đơn giản, dễ đọc và đúng nghiệp vụ.** Chọn cách triển khai nhỏ nhất đáp ứng đầy đủ yêu cầu. Không thêm lớp trung gian, interface, generic framework hoặc dependency để phục vụ nhu cầu giả định.
+- **Luôn code để dễ mở rộng về sau.** Trong phạm vi đã chốt, tổ chức code để có thể bổ sung nghiệp vụ, loại xử lý hoặc tích hợp mới bằng thay đổi cục bộ, hạn chế sửa luồng dùng chung. Đây là tiêu chí thiết kế cho phần đang làm, không phải cho phép triển khai trước tính năng tương lai hoặc tự thay đổi kiến trúc.
 - **Tận dụng class và code hiện có trước khi tạo mới.** Trước khi thêm class, DTO, subclass, converter, wrapper hoặc helper, kiểm tra cấu trúc, caller và cách dùng hiện tại để tái sử dụng trực tiếp. Chỉ tạo mới khi có trách nhiệm, hành vi hoặc contract thực sự khác mà code hiện có không đáp ứng hợp lý; không tạo class để phục vụ cách tách luồng hoặc chuyển đổi dữ liệu không cần thiết.
 - **DTO dùng chung có thể có trường không áp dụng cho một luồng.** Tiếp tục dùng DTO chung và bỏ qua trường đó trong xử lý của luồng tương ứng nếu vẫn đáp ứng nghiệp vụ. Không tạo DTO/subclass riêng chỉ để ẩn hoặc bỏ một trường, không làm thay đổi các luồng vẫn sử dụng trường đó. Nếu API hiện tại đã trả trực tiếp được giá trị đúng kiểu người dùng yêu cầu, dùng luôn cấu trúc hiện có.
 - **Chỉ comment khi cần thiết.** Comment giải thích lý do, quy tắc nghiệp vụ khó suy ra, giới hạn tích hợp hoặc quyết định có chủ đích. Ưu tiên tên rõ nghĩa và tách hàm hợp lý. Không comment diễn giải lại từng dòng, thêm thông tin tác giả/ngày tạo, sinh Javadoc hình thức hay giữ code đã comment out.
@@ -26,6 +27,7 @@ description: "Viết, sửa và refactor code Java theo cấu trúc project đan
 2. Xác định domain/use case cần sửa; lần theo một luồng tương tự từ đầu vào đến service, repository và dữ liệu trả về. Đọc thêm các caller khi thay đổi contract dùng chung.
 3. Đọc các phần liên quan trong [quy tắc chung cho project Java](references/project-conventions.md), rồi đối chiếu với cấu hình và mã nguồn hiện tại trước khi áp dụng.
 4. Theo cách tổ chức package, dependency injection, xử lý lỗi và persistence của module đang sửa. Áp dụng nguyên tắc và sở thích của người dùng trong phạm vi yêu cầu; không áp đặt kiến trúc hoặc công nghệ khác lên project.
+5. Xác định phần xử lý ổn định và phần có thể thay đổi theo từng nghiệp vụ; tìm điểm mở rộng hiện có trước khi chọn cách triển khai. Nếu cần đổi kiến trúc hoặc contract để mở rộng, đề xuất và chờ chấp thuận theo quy tắc ở trên.
 
 ## Chia package theo trách nhiệm
 
@@ -35,6 +37,13 @@ description: "Viết, sửa và refactor code Java theo cấu trúc project đan
 - Code dùng chung giữa nhiều domain mới đưa vào package chung. Helper chỉ phục vụ một feature ở trong feature đó; tránh dồn nghiệp vụ vào `utils`, `common` hoặc một service quá lớn.
 - Giữ chiều phụ thuộc rõ ràng: controller → service → repository/client. Khi nhiều domain phối hợp, dùng service điều phối hoặc hợp đồng hiện có; tránh phụ thuộc vòng và gọi controller từ tầng nghiệp vụ.
 - Theo quy tắc đặt tên và bố trí hiện tại khi sửa code cũ. Không di chuyển hàng loạt file hoặc đổi package ngoài phạm vi yêu cầu.
+
+## Thiết kế để dễ mở rộng
+
+- Tách phần dùng chung khỏi quy tắc đặc thù tại đúng ranh giới trách nhiệm; không trộn điều phối, lựa chọn biến thể và chi tiết xử lý vào một hàm lớn. Giữ API, DTO và hành vi hiện tại khi yêu cầu không thay đổi chúng.
+- Ưu tiên hook, strategy, registry hoặc cơ chế dependency injection đã có để thêm cách xử lý mới. Tránh rải cùng điều kiện theo loại, mã nghiệp vụ hoặc nhà cung cấp ở nhiều nơi khiến mỗi lần mở rộng phải sửa đồng loạt.
+- Đặt cấu hình và quy tắc thay đổi tại nơi sở hữu rõ ràng, thay vì hard-code phân tán. Chỉ tách interface, implementation hoặc lớp trừu tượng mới khi có biến thể thực tế hoặc nhu cầu mở rộng đã được xác nhận; vài nhánh ổn định vẫn có thể dùng hàm và điều kiện trực tiếp.
+- Trước khi bàn giao, rà xem thêm một trường hợp tương tự sẽ phải sửa những chỗ nào và liệu có làm ảnh hưởng các luồng hiện có. Nếu cách triển khai buộc sửa nhiều phần không liên quan, thu hẹp điểm thay đổi trong phạm vi được phép; không tự viết thêm trường hợp tương lai để minh họa.
 
 ## Áp dụng design pattern có mục đích
 

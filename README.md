@@ -6,7 +6,7 @@ Danh mục skill dùng cho các AI coding agent. Repo lưu **skill tự tạo** 
 
 | Skill | Nội dung | Tệp chính |
 |-------|----------|-----------|
-| `java-code` | Viết, sửa và refactor Java theo project hiện tại; ưu tiên code đơn giản, package đúng trách nhiệm. Chỉ thêm test khi người dùng yêu cầu. | [SKILL.md](skills/java-code/SKILL.md) |
+| `java-code` | Viết, sửa và refactor Java theo project hiện tại; ưu tiên code đơn giản, dễ mở rộng, package đúng trách nhiệm. Chỉ thêm test khi người dùng yêu cầu. | [SKILL.md](skills/java-code/SKILL.md) |
 
 `java-code` có kèm metadata cho Codex trong `agents/openai.yaml` và các quy tắc Java dùng chung trong `references/project-conventions.md`. Áp dụng theo code, build và kiến trúc của project hiện tại, không cố định framework hoặc mô hình nghiệp vụ.
 
