@@ -46,6 +46,7 @@ Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Cá
 | [superpowers](https://github.com/obra/superpowers) | `brainstorming`, `systematic-debugging`, `test-driven-development`, ... | [README](https://github.com/obra/superpowers#readme) · [Cài cho Codex](https://github.com/obra/superpowers/blob/main/.codex/INSTALL.md) |
 | [impeccable](https://github.com/pbakaus/impeccable) | Thiết kế, review và cải thiện giao diện | [README](https://github.com/pbakaus/impeccable#readme) |
 | [vercel-skills](https://github.com/vercel-labs/skills) | `find-skills`; CLI khám phá và cài skill | [README](https://github.com/vercel-labs/skills#readme) |
+| [Matt Pocock Skills](https://github.com/mattpocock/skills) | Engineering và productivity: `domain-modeling`, `retro`, `code-review`, `tdd`, lập kế hoạch và triển khai | [Hướng dẫn chính chủ](https://github.com/mattpocock/skills#readme) |
 | [Agent Memory](https://github.com/rohitg00/agentmemory) | Bộ nhớ lâu dài qua MCP; `memory-discipline`, `recall`, `remember`, `forget` | [Cài dịch vụ](https://github.com/rohitg00/agentmemory#install) · [Cài skills và kết nối agent](https://github.com/rohitg00/agentmemory#other-agents) |
 
 ### Cài từng skill bằng Skills CLI
@@ -76,6 +77,22 @@ npx impeccable install --providers=codex --scope=project
 ```
 
 Sau đó chạy `/impeccable init` trong AI coding tool theo [hướng dẫn Impeccable](https://github.com/pbakaus/impeccable#readme).
+
+### Matt Pocock: engineering và productivity
+
+Bộ skill hỗ trợ hiểu codebase, làm rõ yêu cầu, lập kế hoạch, triển khai, review và rút kinh nghiệm. Các skill phát hành chính thức nằm trong `skills/engineering/` và `skills/productivity/`, được liệt kê trong [manifest của tác giả](https://github.com/mattpocock/skills/blob/main/.claude-plugin/plugin.json).
+
+Liệt kê trước, rồi chọn lệnh cài cho Codex hoặc Antigravity. Trong màn chọn skills, chọn các skill thuộc hai nhóm trên; `in-progress` và `misc` là các phần ngoài bộ phát hành chính.
+
+```bash
+npx skills add mattpocock/skills --list
+npx skills add mattpocock/skills -a codex -g
+npx skills add mattpocock/skills -a antigravity -g
+```
+
+`-g` cài ở phạm vi người dùng. Để chỉ cài một vài skill, thêm tên cụ thể, ví dụ `--skill domain-modeling --skill retro --skill code-review`. Nếu dùng Antigravity CLI, thay `antigravity` bằng `antigravity-cli`.
+
+Sau khi cài, mở phiên agent mới để nhận skills. Chạy `/setup-matt-pocock-skills` một lần trong project muốn áp dụng theo [hướng dẫn thiết lập](https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md); bước này thiết lập issue tracker, nhãn triage và nơi lưu glossary/ADR cho project đó.
 
 ### Agent Memory: dịch vụ MCP và skills
 
