@@ -48,6 +48,7 @@ Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Cá
 | [vercel-skills](https://github.com/vercel-labs/skills) | `find-skills`; CLI khám phá và cài skill | [README](https://github.com/vercel-labs/skills#readme) |
 | [Matt Pocock Skills](https://github.com/mattpocock/skills) | Engineering và productivity: `domain-modeling`, `retro`, `code-review`, `tdd`, lập kế hoạch và triển khai | [Hướng dẫn chính chủ](https://github.com/mattpocock/skills#readme) |
 | [Agent Memory](https://github.com/rohitg00/agentmemory) | Bộ nhớ lâu dài qua MCP; `memory-discipline`, `recall`, `remember`, `forget` | [Cài dịch vụ](https://github.com/rohitg00/agentmemory#install) · [Cài skills và kết nối agent](https://github.com/rohitg00/agentmemory#other-agents) |
+| [graphify](https://github.com/Graphify-Labs/graphify) | Biến codebase, docs, schema thành knowledge graph; skill `/graphify` cho Claude Code, Cursor, Codex, Gemini CLI | [README](https://github.com/Graphify-Labs/graphify#readme) |
 
 ### Cài từng skill bằng Skills CLI
 
@@ -117,6 +118,31 @@ npx skills add rohitg00/agentmemory --skill memory-discipline --skill recall --s
 `memory-discipline` hướng dẫn đọc bộ nhớ trước khi làm việc và lưu quyết định đã xác minh; `recall` tìm lại, `remember` lưu thêm, `forget` xóa ghi chú theo yêu cầu. Nếu dùng Antigravity CLI, thay `antigravity` bằng `antigravity-cli` theo [danh sách agent của Skills CLI](https://github.com/vercel-labs/skills#supported-agents).
 
 Để Codex và Antigravity dùng chung bộ nhớ, cấu hình cả hai kết nối cùng một dịch vụ và dùng mã project nhất quán. Việc tự ghi/đọc còn phụ thuộc cấu hình và hooks của từng agent; kiểm tra bằng cách lưu một ghi chú rồi đọc lại từ agent còn lại. Repo này chỉ lưu hướng dẫn, không chứa dữ liệu bộ nhớ hay cấu hình riêng của máy.
+
+### Graphify: knowledge graph cho codebase
+
+Graphify phân tích mã nguồn, tài liệu, schema thành đồ thị tri thức (knowledge graph) chạy local hoàn toàn (AST parsing, không dùng vector store). Hỗ trợ Claude Code, Cursor, Codex, Gemini CLI và GitHub Copilot.
+
+Cài đặt CLI bằng `uv` hoặc `pipx` (gói tên `graphifyy`):
+
+```bash
+uv tool install graphifyy
+# hoặc: pipx install graphifyy
+```
+
+Tự động nhận diện trợ lý và đăng ký skill:
+
+```bash
+graphify install
+```
+
+Sử dụng trực tiếp trong AI coding tool:
+
+```text
+/graphify .
+```
+
+Kết quả sinh ra thư mục `graphify-out/` gồm `graph.html` (trực quan hóa tương tác), `GRAPH_REPORT.md` (tóm tắt liên kết và khái niệm chính) và `graph.json` (đồ thị cấu trúc).
 
 ## Cập nhật và đóng góp
 
