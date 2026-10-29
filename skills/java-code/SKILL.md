@@ -38,6 +38,13 @@ description: "Viết, sửa và refactor code Java theo cấu trúc project đan
 - Giữ chiều phụ thuộc rõ ràng: controller → service → repository/client. Khi nhiều domain phối hợp, dùng service điều phối hoặc hợp đồng hiện có; tránh phụ thuộc vòng và gọi controller từ tầng nghiệp vụ.
 - Theo quy tắc đặt tên và bố trí hiện tại khi sửa code cũ. Không di chuyển hàng loạt file hoặc đổi package ngoài phạm vi yêu cầu.
 
+## Tái sử dụng code và quản lý constants
+
+- Trước khi viết logic mới, tìm và tái sử dụng hàm, class hoặc constants phù hợp đã có. Với xử lý cần dùng ở nhiều nơi như chuyển đổi ngày giờ, đưa phần chung vào một hàm hoặc class đúng trách nhiệm (ví dụ DateUtils), nhận tham số cần thiết thay vì copy code giữa các service.
+- Tập trung các hằng số dùng lại như đường dẫn API, định dạng ngày giờ và mã quy ước vào class constants hoặc class sở hữu chúng theo cấu trúc project; không rải literal ở nhiều nơi. Tái sử dụng hằng hiện có. Giá trị thay đổi theo môi trường vẫn lấy từ cấu hình.
+- Giữ helper dùng chung độc lập với nghiệp vụ của một luồng. Ví dụ, DateUtils chỉ chuyển đổi ngày giờ; service quyết định giới hạn thời hạn và thông báo lỗi nghiệp vụ. Code chỉ thuộc một feature đặt trong feature đó; chỉ đưa vào package chung khi nhiều nơi thực sự dùng.
+- Chọn hàm hoặc class nhỏ, tham số rõ ràng và cách gọi đơn giản. Chỉ tách phần có thể tái sử dụng thực tế; không thêm interface, base class hoặc framework chỉ để dự phòng.
+
 ## Thiết kế để dễ mở rộng
 
 - Tách phần dùng chung khỏi quy tắc đặc thù tại đúng ranh giới trách nhiệm; không trộn điều phối, lựa chọn biến thể và chi tiết xử lý vào một hàm lớn. Giữ API, DTO và hành vi hiện tại khi yêu cầu không thay đổi chúng.
