@@ -51,6 +51,9 @@ Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Cá
 | [Matt Pocock Skills](https://github.com/mattpocock/skills) | Engineering và productivity: `domain-modeling`, `retro`, `code-review`, `tdd`, lập kế hoạch và triển khai | [Hướng dẫn chính chủ](https://github.com/mattpocock/skills#readme) |
 | [Agent Memory](https://github.com/rohitg00/agentmemory) | Bộ nhớ lâu dài qua MCP; `memory-discipline`, `recall`, `remember`, `forget` | [Cài dịch vụ](https://github.com/rohitg00/agentmemory#install) · [Cài skills và kết nối agent](https://github.com/rohitg00/agentmemory#other-agents) |
 | [graphify](https://github.com/Graphify-Labs/graphify) | Biến codebase, docs, schema thành knowledge graph; skill `/graphify` cho Claude Code, Cursor, Codex, Gemini CLI | [README](https://github.com/Graphify-Labs/graphify#readme) |
+| [Context7](https://context7.com) | Tra cứu tài liệu và code example mới nhất theo phiên bản qua MCP (giảm hallucination) | [Tài liệu chính chủ](https://context7.com) |
+| [Chrome DevTools MCP](https://github.com/ChromeDevTools/devtools-mcp) | MCP Server kết nối Chrome DevTools: inspect DOM, console logs, network cho Web/Frontend | [README](https://github.com/ChromeDevTools/devtools-mcp#readme) |
+| [Playwright MCP](https://github.com/microsoft/playwright) | MCP Server tự động hóa browser: test E2E user flows, tương tác UI tự động | [Tài liệu npm](https://www.npmjs.com/package/@playwright/mcp) |
 
 ### Cài từng skill bằng Skills CLI
 
@@ -145,6 +148,76 @@ Sử dụng trực tiếp trong AI coding tool:
 ```
 
 Kết quả sinh ra thư mục `graphify-out/` gồm `graph.html` (trực quan hóa tương tác), `GRAPH_REPORT.md` (tóm tắt liên kết và khái niệm chính) và `graph.json` (đồ thị cấu trúc).
+
+### Context7: tra cứu tài liệu và code example mới nhất qua MCP
+
+Context7 (phát triển bởi Upstash) giải quyết vấn đề AI bị lỗi thời kiến thức (stale training data) và sinh mã theo API cũ hoặc sai lệch (hallucination). Khi lập trình với các thư viện thay đổi liên tục (như Next.js, Tailwind, Supabase, LangChain...), Context7 tự động truy xuất tài liệu và ví dụ chính xác theo phiên bản đưa vào bối cảnh của agent.
+
+Hỗ trợ đồng thời cho cả **Antigravity** và **Codex** (cũng như Claude Code, Cursor) qua chuẩn MCP:
+
+1. **Thiết lập tự động qua CLI**:
+   ```bash
+   npx ctx7 setup
+   ```
+
+2. **Cấu hình thủ công cho Antigravity** (`~/.gemini/config/mcp_config.json`):
+   ```json
+   {
+     "mcpServers": {
+       "context7": {
+         "command": "npx",
+         "args": ["-y", "@upstash/context7-mcp"]
+       }
+     }
+   }
+   ```
+   *(Hoặc dùng trực tiếp endpoint remote HTTP: `"url": "https://mcp.context7.com/mcp"`)*
+
+3. **Cấu hình thủ công cho Codex** (`~/.codex/config.toml`):
+   ```toml
+   [mcp_servers.context7]
+   command = "npx"
+   args = ["-y", "@upstash/context7-mcp"]
+   ```
+
+---
+
+### Bộ công cụ MCP cho Web / Frontend: Chrome DevTools & Playwright
+
+> **Khuyến nghị**: Nên cài nếu anh làm **Web / Frontend**. Giúp AI theo phong cách *vibe coding* tự kiểm tra giao diện, bắt lỗi console/network và tự động sửa lỗi ngay trong chu trình lập trình.
+
+Hai công cụ bổ trợ nhau:
+- **Chrome DevTools MCP**: Cho phép agent kết nối vào trình duyệt Chrome qua DevTools Protocol để đọc log console, theo dõi network requests lỗi và soi cấu trúc DOM khi web đang chạy.
+- **Playwright MCP**: Cho phép agent mở browser, tương tác click, nhập form, chụp ảnh màn hình và chạy kiểm thử E2E mô phỏng hành vi người dùng thật.
+
+**Cấu hình cho Antigravity** (`~/.gemini/config/mcp_config.json`):
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    }
+  }
+}
+```
+
+**Cấu hình cho Codex** (`~/.codex/config.toml`):
+```toml
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["-y", "chrome-devtools-mcp"]
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest"]
+```
+
+Sau khi cấu hình, khởi động lại phiên làm việc của Antigravity hoặc Codex để agent tự nhận diện và nạp các công cụ này.
 
 ## Cập nhật và đóng góp
 
