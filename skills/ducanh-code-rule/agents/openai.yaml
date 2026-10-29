@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ducanh Code Rule"
+  short_description: "Code Java đơn giản, đúng package và theo project"
+  default_prompt: "Dùng $ducanh-code-rule để triển khai yêu cầu Java theo project hiện tại: rà code để tái sử dụng trước khi tạo hàm chung mới, code đơn giản, dễ mở rộng, package đúng trách nhiệm, chỉ comment khi cần và chỉ thêm test khi tôi yêu cầu."
+policy:
+  allow_implicit_invocation: true

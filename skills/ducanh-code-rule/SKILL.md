@@ -1,9 +1,11 @@
 ---
-name: java-code
-description: "Viết, sửa và refactor code Java theo cấu trúc project đang mở; ưu tiên code đơn giản, dễ mở rộng, package đúng trách nhiệm và design pattern phù hợp. Dùng cho yêu cầu triển khai Java, không cố định phiên bản Java hay framework. Chỉ thêm test khi người dùng yêu cầu rõ ràng."
+name: ducanh-code-rule
+description: "Viết, sửa và refactor code Java theo cấu trúc project đang mở; ưu tiên tái sử dụng code hiện có, code đơn giản, dễ mở rộng, package đúng trách nhiệm và design pattern phù hợp. Dùng cho yêu cầu triển khai Java, không cố định phiên bản Java hay framework. Chỉ thêm test khi người dùng yêu cầu rõ ràng."
 ---
 
-# Java Code
+# Ducanh Code Rule
+
+Skill này thay thế `java-code`. Khi cập nhật cấu hình hoặc hướng dẫn cho agent, dùng tên và đường dẫn `ducanh-code-rule`, gọi bằng `$ducanh-code-rule`.
 
 Áp dụng khi triển khai, sửa lỗi hoặc refactor Java. Dùng các quy tắc chung theo yêu cầu, cấu hình và kiến trúc của project hiện tại; không mặc định phiên bản Java, framework hoặc mô hình nghiệp vụ.
 
@@ -17,10 +19,17 @@ description: "Viết, sửa và refactor code Java theo cấu trúc project đan
 - **Không gắn skill với phiên bản cụ thể.** Xác định Java, framework, dependency, namespace và build tool từ project đang mở. Dùng cú pháp/API tương thích với cấu hình đó; chỉ nâng cấp khi nằm trong yêu cầu của người dùng.
 - **Ưu tiên code đơn giản, dễ đọc và đúng nghiệp vụ.** Chọn cách triển khai nhỏ nhất đáp ứng đầy đủ yêu cầu. Không thêm lớp trung gian, interface, generic framework hoặc dependency để phục vụ nhu cầu giả định.
 - **Luôn code để dễ mở rộng về sau.** Trong phạm vi đã chốt, tổ chức code để có thể bổ sung nghiệp vụ, loại xử lý hoặc tích hợp mới bằng thay đổi cục bộ, hạn chế sửa luồng dùng chung. Đây là tiêu chí thiết kế cho phần đang làm, không phải cho phép triển khai trước tính năng tương lai hoặc tự thay đổi kiến trúc.
-- **Tận dụng class và code hiện có trước khi tạo mới.** Trước khi thêm class, DTO, subclass, converter, wrapper hoặc helper, kiểm tra cấu trúc, caller và cách dùng hiện tại để tái sử dụng trực tiếp. Chỉ tạo mới khi có trách nhiệm, hành vi hoặc contract thực sự khác mà code hiện có không đáp ứng hợp lý; không tạo class để phục vụ cách tách luồng hoặc chuyển đổi dữ liệu không cần thiết.
+- **Trước khi tạo hàm dùng chung mới, phải rà code có thể tái sử dụng.** Tìm hàm, helper, service và hook tương đương trong module đang sửa và các module dùng chung liên quan; đọc implementation và caller để đối chiếu contract, hành vi null và tác dụng phụ. Ưu tiên gọi lại hoặc mở rộng code hiện có khi phù hợp và không làm sai hành vi của caller hiện tại. Chỉ tạo hàm dùng chung mới khi code hiện có không đáp ứng hợp lý; nêu ngắn phần khác biệt trong báo cáo thay đổi, không sao chép logic rồi chỉ đổi tên. Áp dụng cùng bước rà soát trước khi thêm class, DTO, subclass, converter hoặc wrapper; không tạo cấu trúc mới chỉ để tách luồng hoặc chuyển đổi dữ liệu không cần thiết. Nếu việc mở rộng làm thay đổi logic, tuân thủ quy tắc đề xuất và chấp thuận ở trên.
 - **DTO dùng chung có thể có trường không áp dụng cho một luồng.** Tiếp tục dùng DTO chung và bỏ qua trường đó trong xử lý của luồng tương ứng nếu vẫn đáp ứng nghiệp vụ. Không tạo DTO/subclass riêng chỉ để ẩn hoặc bỏ một trường, không làm thay đổi các luồng vẫn sử dụng trường đó. Nếu API hiện tại đã trả trực tiếp được giá trị đúng kiểu người dùng yêu cầu, dùng luôn cấu trúc hiện có.
 - **Chỉ comment khi cần thiết.** Comment giải thích lý do, quy tắc nghiệp vụ khó suy ra, giới hạn tích hợp hoặc quyết định có chủ đích. Ưu tiên tên rõ nghĩa và tách hàm hợp lý. Không comment diễn giải lại từng dòng, thêm thông tin tác giả/ngày tạo, sinh Javadoc hình thức hay giữ code đã comment out.
 
+## Chọn cách triển khai gọn trước khi viết code
+
+- Trước khi sửa, rà luồng dữ liệu, caller và code có sẵn; chọn cách ít bước, ít truy vấn và ít chuyển đổi trung gian nhất mà vẫn đúng nghiệp vụ, dễ đọc và dễ debug. Không viết cách vòng vèo trước rồi mới tính chuyện tối ưu.
+- Với thông tin có thể lấy hợp lý ngay trong SQL hiện tại, ưu tiên projection, JOIN hoặc EXISTS tại repository; tránh query thêm rồi gom Map/List và đối chiếu lại bằng Java. Kiểm tra tính duy nhất của khóa, null, phân trang, count và chi phí truy vấn trước khi chọn; không mặc định đẩy mọi nghiệp vụ xuống SQL.
+- Chỉ thêm class, hàm con, wrapper, collection hoặc bước mapping khi có trách nhiệm hay lợi ích rõ ràng. Không tách vụn luồng hoặc thêm cấu trúc trung gian chỉ để phục vụ cách triển khai do mình tạo ra; tận dụng DTO và trường dữ liệu đã có.
+- Ngắn gọn phải đi cùng dễ hiểu: không nén thành stream, ternary lồng nhau hoặc SQL khó đọc để giảm số dòng. Đưa điều kiện bất biến ra ngoài vòng lặp và bỏ bước xử lý lặp, chuyển đổi qua lại, biến trung gian không cần thiết.
+- Trước khi bàn giao, tự rà từng phần mới: có thể dùng code hiện có, tính trực tiếp ở nơi đã có dữ liệu hoặc bỏ hẳn bước nào không? Giữ nguyên hợp đồng API và điều kiện nghiệp vụ khi rút gọn; không tuyên bố nhanh hơn nếu chưa đo.
 ## Đọc ngữ cảnh trước khi sửa
 
 1. Đọc hướng dẫn áp dụng cho repository, trạng thái thay đổi hiện tại và file build liên quan (`pom.xml`, cấu hình Gradle hoặc tương đương).
@@ -75,7 +84,7 @@ Với ít nhánh xử lý ổn định, một hàm rõ ràng hoặc điều ki�
 - Giữ quy tắc quyền truy cập, người xử lý, trạng thái giao dịch, lịch sử và thông báo của use case đang sửa. Kiểm tra các điều kiện này trước khi ghi dữ liệu hoặc gọi tác vụ có tác dụng phụ.
 - Giữ kiểu dữ liệu, đơn vị tiền, scale, quy tắc làm tròn và định dạng thời gian theo contract hiện tại. Không thay kiểu dữ liệu hàng loạt; tránh chuyển tiền sang số thực gây mất độ chính xác.
 - Dùng parameter binding cho dữ liệu đầu vào trong truy vấn; không nối trực tiếp giá trị người dùng vào SQL. Giữ đồng nhất điều kiện lọc giữa truy vấn dữ liệu và truy vấn đếm.
-- Log thông tin cần để theo dõi luồng và chẩn đoán lỗi; không log credential, token hoặc toàn bộ payload chứa dữ liệu nhạy cảm.
+- **Luôn log dữ liệu request và response khi gọi ra ngoài.** Với mỗi lời gọi external API hoặc hệ thống bên ngoài trong phần code đang triển khai/chỉnh sửa, log payload request trước khi gửi và payload response sau khi nhận; không chỉ log thông báo bắt đầu/kết thúc. Kèm endpoint/hệ thống đích, trạng thái phản hồi và requestId/correlationId hiện có để đối chiếu. Khi timeout hoặc lỗi không nhận được response, log lỗi tương ứng cùng thông tin nhận diện request. Che hoặc loại bỏ credential, token, mật khẩu và các trường nhạy cảm trước khi ghi log; vẫn log các trường nghiệp vụ còn lại. Tái sử dụng cơ chế logging/masking chung của project, tránh log trùng ở nhiều tầng.
 
 ## Kiểm tra và bàn giao
 

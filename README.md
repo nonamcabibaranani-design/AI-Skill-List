@@ -6,16 +6,18 @@ Danh mục skill dùng cho các AI coding agent. Repo lưu **skill tự tạo** 
 
 | Skill | Nội dung | Tệp chính |
 |-------|----------|-----------|
-| `java-code` | Viết, sửa và refactor Java theo project hiện tại; ưu tiên code đơn giản, dễ mở rộng, package đúng trách nhiệm. Chỉ thêm test khi người dùng yêu cầu. | [SKILL.md](skills/java-code/SKILL.md) |
+| `ducanh-code-rule` | Viết, sửa và refactor Java theo project hiện tại; rà code để tái sử dụng trước khi tạo hàm chung mới, giữ code đơn giản, dễ mở rộng và package đúng trách nhiệm. Chỉ thêm test khi người dùng yêu cầu. | [SKILL.md](skills/ducanh-code-rule/SKILL.md) |
 
-`java-code` có kèm metadata cho Codex trong `agents/openai.yaml` và các quy tắc Java dùng chung trong `references/project-conventions.md`. Áp dụng theo code, build và kiến trúc của project hiện tại, không cố định framework hoặc mô hình nghiệp vụ.
+`ducanh-code-rule` có kèm metadata cho Codex trong `agents/openai.yaml` và các quy tắc Java dùng chung trong `references/project-conventions.md`. Áp dụng theo code, build và kiến trúc của project hiện tại, không cố định framework hoặc mô hình nghiệp vụ.
 
-### Cài java-code
+Skill đã đổi tên từ `java-code` sang `ducanh-code-rule`. Các agent cần cập nhật tên gọi thành `$ducanh-code-rule` và đường dẫn thành `skills/ducanh-code-rule/`. Khi cập nhật bản cài, thay thư mục `java-code` cũ bằng toàn bộ thư mục mới, gồm cả `agents/` và `references/`, để tránh giữ hai bản skill trùng nhau.
+
+### Cài ducanh-code-rule
 
 Cần Node.js/npm để chạy `npx`. Cài trực tiếp từ repo này cho Codex:
 
 ```bash
-npx skills add nonamcabibaranani-design/AI-Skill-List --skill java-code -a codex -g
+npx skills add nonamcabibaranani-design/AI-Skill-List --skill ducanh-code-rule -a codex -g
 ```
 
 Thay `codex` bằng agent muốn dùng, ví dụ `claude-code` hoặc `cursor`. Bỏ `-g` nếu muốn cài ở phạm vi project. Xem danh sách agent và tùy chọn trong [tài liệu Skills CLI](https://github.com/vercel-labs/skills#readme).
@@ -30,10 +32,10 @@ cd AI-Skill-List
 Sau đó cài từ thư mục hiện tại:
 
 ```bash
-npx skills add . --skill java-code -a codex -g
+npx skills add . --skill ducanh-code-rule -a codex -g
 ```
 
-Hoặc chép **toàn bộ** `skills/java-code/` vào thư mục skills mà agent hỗ trợ; giữ cả `agents/` và `references/`.
+Hoặc chép **toàn bộ** `skills/ducanh-code-rule/` vào thư mục skills mà agent hỗ trợ; giữ cả `agents/` và `references/`.
 
 ## Skill từ nguồn bên ngoài
 
