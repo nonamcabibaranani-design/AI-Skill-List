@@ -7,7 +7,7 @@
 - Đặt class trong package hoặc module sở hữu trách nhiệm của nó. Theo cách tổ chức hiện có theo domain hoặc theo tầng; tránh đưa code riêng của một nghiệp vụ vào package dùng chung.
 - Với ứng dụng phân tầng, controller hoặc entry point tiếp nhận đầu vào và chuyển cho tầng xử lý nghiệp vụ; repository hoặc lớp truy cập dữ liệu phụ trách persistence. Với kiến trúc khác, giữ ranh giới tương ứng của project.
 - Tái sử dụng component và cơ chế dependency injection đang có. Khi có nhiều implementation, kiểm tra cách chọn dependency, vòng đời và cấu hình đăng ký; không dựa vào tên class để suy đoán implementation thực tế.
-- Chỉ tách interface, base class hoặc module dùng chung khi có nhu cầu cụ thể. Ưu tiên cấu trúc nhỏ nhất giải quyết được yêu cầu.
+- Chỉ tách interface, base class hoặc module dùng chung khi có nhu cầu cụ thể; không tạo interface/abstraction nếu chỉ có duy nhất một implementation đơn lẻ và không có nhu cầu đa hình thực tế. Ưu tiên cấu trúc nhỏ nhất giải quyết được yêu cầu. Không thêm try-catch hay null-check phòng ngừa cho các kịch bản bất khả thi.
 
 ## Chọn và mở rộng design pattern
 
