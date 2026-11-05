@@ -101,21 +101,21 @@ flowchart TD
 
 Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Các link dưới đây dẫn tới tài liệu chính chủ để theo dõi cách cài và cập nhật của từng dự án:
 
-| Nguồn | Skill tiêu biểu | Hướng dẫn cài chính chủ |
-|---|---|---|
-| [ECC (Everything Claude Code)](https://github.com/affaan-m/everything-claude-code) | Kho tham khảo mẫu: `database-reviewer`, `security-review`, `backend-patterns` | [README](https://github.com/affaan-m/everything-claude-code#readme) |
-| [ponytail](https://github.com/DietrichGebert/ponytail) | `ponytail`, `ponytail-audit`, `ponytail-debt`, `ponytail-review` (Triết lý Lazy Senior Dev) | [README](https://github.com/DietrichGebert/ponytail#readme) |
-| [superpowers](https://github.com/obra/superpowers) | `brainstorming`, `systematic-debugging`, `test-driven-development` | [README](https://github.com/obra/superpowers#readme) · [Cài cho Codex](https://github.com/obra/superpowers/blob/main/.codex/INSTALL.md) |
-| [Matt Pocock Skills](https://github.com/mattpocock/skills) | `domain-modeling`, `to-spec`, `grilling`, `code-review`, `retro` | [Hướng dẫn chính chủ](https://github.com/mattpocock/skills#readme) |
-| [Agent Memory](https://github.com/rohitg00/agentmemory) | Bộ nhớ lâu dài qua MCP: `memory-discipline`, `recall`, `remember`, `forget` | [Cài dịch vụ](https://github.com/rohitg00/agentmemory#install) · [Kết nối agent](https://github.com/rohitg00/agentmemory#other-agents) |
-| [Context7](https://context7.com) | Tra cứu tài liệu và code example mới nhất theo phiên bản qua MCP (giảm hallucination) | [Tài liệu chính chủ](https://context7.com) |
-| [Chrome DevTools MCP](https://github.com/ChromeDevTools/devtools-mcp) | MCP Server kết nối Chrome DevTools: inspect DOM, console logs, network cho Web/Frontend | [README](https://github.com/ChromeDevTools/devtools-mcp#readme) |
-| [Playwright MCP](https://github.com/microsoft/playwright) | MCP Server tự động hóa browser: test E2E user flows, tương tác UI tự động | [Tài liệu npm](https://www.npmjs.com/package/@playwright/mcp) |
-| [impeccable](https://github.com/pbakaus/impeccable) | Thiết kế, review và cải thiện giao diện frontend | [README](https://github.com/pbakaus/impeccable#readme) |
-| [graphify](https://github.com/Graphify-Labs/graphify) | Biến codebase, docs, schema thành knowledge graph (`/graphify`) | [README](https://github.com/Graphify-Labs/graphify#readme) |
-| [agent-desktop (Vercel Labs)](https://github.com/vercel-labs/agent-desktop) | `agent-desktop`, `agent-desktop-windows` (Computer Use cho AI qua OS Accessibility Tree, điều khiển GUI Desktop) | [README](https://github.com/vercel-labs/agent-desktop#readme) |
-| [caveman](https://github.com/JuliusBrussee/caveman) | `caveman`, `caveman-commit`, `caveman-compress` | [README](https://github.com/JuliusBrussee/caveman#readme) |
-| [vercel-skills](https://github.com/vercel-labs/skills) | `find-skills`; CLI khám phá và cài skill | [README](https://github.com/vercel-labs/skills#readme) |
+| Nguồn | Skill tiêu biểu | Hướng dẫn cài chính chủ | Ngày thêm |
+|---|---|---|:---:|
+| [ponytail](https://github.com/DietrichGebert/ponytail) | `ponytail`, `ponytail-audit`, `ponytail-debt`, `ponytail-review` (Triết lý Lazy Senior Dev) | [README](https://github.com/DietrichGebert/ponytail#readme) | 2026-09-16 |
+| [superpowers](https://github.com/obra/superpowers) | `brainstorming`, `systematic-debugging`, `test-driven-development` | [README](https://github.com/obra/superpowers#readme) · [Cài cho Codex](https://github.com/obra/superpowers/blob/main/.codex/INSTALL.md) | 2026-09-16 |
+| [impeccable](https://github.com/pbakaus/impeccable) | Thiết kế, review và cải thiện giao diện frontend | [README](https://github.com/pbakaus/impeccable#readme) | 2026-09-16 |
+| [caveman](https://github.com/JuliusBrussee/caveman) | `caveman`, `caveman-commit`, `caveman-compress` | [README](https://github.com/JuliusBrussee/caveman#readme) | 2026-09-16 |
+| [vercel-skills](https://github.com/vercel-labs/skills) | `find-skills`; CLI khám phá và cài skill | [README](https://github.com/vercel-labs/skills#readme) | 2026-09-16 |
+| [Agent Memory](https://github.com/rohitg00/agentmemory) | Bộ nhớ lâu dài qua MCP: `memory-discipline`, `recall`, `remember`, `forget` | [Cài dịch vụ](https://github.com/rohitg00/agentmemory#install) · [Kết nối agent](https://github.com/rohitg00/agentmemory#other-agents) | 2026-10-14 |
+| [Matt Pocock Skills](https://github.com/mattpocock/skills) | `domain-modeling`, `to-spec`, `grilling`, `code-review`, `retro` | [Hướng dẫn chính chủ](https://github.com/mattpocock/skills#readme) | 2026-10-26 |
+| [graphify](https://github.com/Graphify-Labs/graphify) | Biến codebase, docs, schema thành knowledge graph (`/graphify`) | [README](https://github.com/Graphify-Labs/graphify#readme) | 2026-10-28 |
+| [Context7](https://context7.com) | Tra cứu tài liệu và code example mới nhất theo phiên bản qua MCP (giảm hallucination) | [Tài liệu chính chủ](https://context7.com) | 2026-10-29 |
+| [Chrome DevTools MCP](https://github.com/ChromeDevTools/devtools-mcp) | MCP Server kết nối Chrome DevTools: inspect DOM, console logs, network cho Web/Frontend | [README](https://github.com/ChromeDevTools/devtools-mcp#readme) | 2026-10-29 |
+| [Playwright MCP](https://github.com/microsoft/playwright) | MCP Server tự động hóa browser: test E2E user flows, tương tác UI tự động | [Tài liệu npm](https://www.npmjs.com/package/@playwright/mcp) | 2026-10-29 |
+| [ECC (Everything Claude Code)](https://github.com/affaan-m/everything-claude-code) | Kho tham khảo mẫu: `database-reviewer`, `security-review`, `backend-patterns` | [README](https://github.com/affaan-m/everything-claude-code#readme) | 2026-10-30 |
+| [agent-desktop (Vercel Labs)](https://github.com/vercel-labs/agent-desktop) | `agent-desktop`, `agent-desktop-windows` (Computer Use cho AI qua OS Accessibility Tree, điều khiển GUI Desktop) | [README](https://github.com/vercel-labs/agent-desktop#readme) | 2026-11-05 |
 
 ---
 
