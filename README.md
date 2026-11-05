@@ -113,6 +113,8 @@ Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Cá
 | [Playwright MCP](https://github.com/microsoft/playwright) | MCP Server tự động hóa browser: test E2E user flows, tương tác UI tự động | [Tài liệu npm](https://www.npmjs.com/package/@playwright/mcp) |
 | [impeccable](https://github.com/pbakaus/impeccable) | Thiết kế, review và cải thiện giao diện frontend | [README](https://github.com/pbakaus/impeccable#readme) |
 | [graphify](https://github.com/Graphify-Labs/graphify) | Biến codebase, docs, schema thành knowledge graph (`/graphify`) | [README](https://github.com/Graphify-Labs/graphify#readme) |
+| [agent-desktop (Vercel Labs)](https://github.com/vercel-labs/agent-desktop) | `agent-desktop`, `agent-desktop-windows` (Computer Use cho AI qua OS Accessibility Tree, điều khiển GUI Desktop) | [README](https://github.com/vercel-labs/agent-desktop#readme) |
+| [book-to-skill](https://github.com/virgiliojr94/book-to-skill) | `book-to-skill` (Chuyển đổi sách/tài liệu PDF, EPUB... thành AI Agent Skill) | [README](https://github.com/virgiliojr94/book-to-skill#readme) |
 | [caveman](https://github.com/JuliusBrussee/caveman) | `caveman`, `caveman-commit`, `caveman-compress` | [README](https://github.com/JuliusBrussee/caveman#readme) |
 | [vercel-skills](https://github.com/vercel-labs/skills) | `find-skills`; CLI khám phá và cài skill | [README](https://github.com/vercel-labs/skills#readme) |
 
@@ -277,6 +279,56 @@ args = ["-y", "chrome-devtools-mcp"]
 command = "npx"
 args = ["-y", "@playwright/mcp@latest"]
 ```
+
+---
+
+### agent-desktop: Cho AI dùng và điều khiển máy tính (Computer Use)
+
+`agent-desktop` (phát triển bởi Vercel Labs) là công cụ CLI mã nguồn mở viết bằng Rust, cho phép các AI Agent (Antigravity, Codex, Claude Code, Cursor...) quan sát và thao tác trực tiếp với các ứng dụng desktop trên Windows, macOS và Linux.
+
+**Điểm đột phá:**
+- **Không đoán tọa độ pixel:** Thay vì chụp màn hình rồi phán đoán tọa độ chuột (dễ lệch pixel), công cụ đọc trực tiếp cây trợ năng hệ điều hành (**Microsoft UI Automation - UIA** trên Windows).
+- **Định danh phần tử chuẩn xác (`@ref`):** Mỗi button, form, menu nhận một mã Ref ID duy nhất (ví dụ `@s8f3k2p9:e12`). Agent thao tác trực tiếp trên ref đó, không lo cửa sổ bị xê dịch hay đổi độ phân giải màn hình.
+- **Thao tác ngầm (Headless):** Đọc dữ liệu và kích hoạt hành vi phần tử mà không cần chiếm quyền điều khiển chuột hay cướp tiêu điểm (focus) màn hình của người dùng.
+- **Đóng gói sẵn Skill:** Tích hợp sẵn bộ hướng dẫn `SKILL.md` cho Agent cùng tài liệu chi tiết cho từng nền tảng hệ điều hành.
+
+1. **Cài đặt CLI (Toàn cục)** (Yêu cầu Node.js >= 18):
+   ```bash
+   npm install -g agent-desktop
+   ```
+
+2. **Kiểm tra trạng thái & quyền hạn:**
+   ```bash
+   agent-desktop status
+   ```
+
+3. **Cài đặt Skill vào Agent:**
+   ```bash
+   # Cài đặt qua Skills CLI
+   npx skills add vercel-labs/agent-desktop --skill agent-desktop -a codex -g
+   npx skills add vercel-labs/agent-desktop --skill agent-desktop -a antigravity -g
+   
+   # Hoặc trích xuất tài liệu skill trực tiếp từ chính binary đã cài:
+   agent-desktop skills get desktop
+   agent-desktop skills get windows
+   ```
+
+---
+
+### book-to-skill: Chuyển đổi sách & tài liệu thành AI Agent Skill
+
+`book-to-skill` (bởi virgiliojr94) giải quyết vấn đề nhồi nhét tài liệu dài vào context window gây tốn kém token và ảo giác (hallucination). Công cụ bóc tách tài liệu (PDF, EPUB, DOCX, Markdown, HTML...) thành các mental models, frameworks, nguyên tắc hành động và anti-patterns theo chuẩn Agent Skill (`SKILL.md` + thư viện `chapters/` đọc theo yêu cầu). Giúp tiết kiệm từ 24x đến 51x chi phí token khi cần agent tham vấn tri thức từ sách chuyên ngành.
+
+1. **Cài đặt qua Skills CLI:**
+   ```bash
+   npx skills add virgiliojr94/book-to-skill -a codex -g
+   npx skills add virgiliojr94/book-to-skill -a antigravity -g
+   ```
+
+2. **Sử dụng trong Agent:**
+   ```text
+   /book-to-skill <đường-dẫn-file-sách> [tên-skill]
+   ```
 
 ---
 
