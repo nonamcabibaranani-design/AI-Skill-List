@@ -116,6 +116,7 @@ Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Cá
 | [Playwright MCP](https://github.com/microsoft/playwright) | MCP Server tự động hóa browser: test E2E user flows, tương tác UI tự động | [Tài liệu npm](https://www.npmjs.com/package/@playwright/mcp) | 2026-10-29 |
 | [ECC (Everything Claude Code)](https://github.com/affaan-m/everything-claude-code) | Kho tham khảo mẫu: `database-reviewer`, `security-review`, `backend-patterns` | [README](https://github.com/affaan-m/everything-claude-code#readme) | 2026-10-30 |
 | [agent-desktop (Vercel Labs)](https://github.com/vercel-labs/agent-desktop) | `agent-desktop`, `agent-desktop-windows` (Computer Use cho AI qua OS Accessibility Tree, điều khiển GUI Desktop) | [README](https://github.com/vercel-labs/agent-desktop#readme) | 2026-11-05 |
+| [Modern Web Guidance (Google Chrome)](https://github.com/GoogleChrome/modern-web-guidance) | `modern-web-guidance` (Tra cứu ~250 tính năng Web Platform hiện đại: CSS, HTML/DOM, Web API cho Frontend) | [README](https://github.com/GoogleChrome/modern-web-guidance#readme) | 2026-11-25 |
 
 ---
 
@@ -310,6 +311,41 @@ args = ["-y", "@playwright/mcp@latest"]
    # Hoặc trích xuất tài liệu skill trực tiếp từ chính binary đã cài:
    agent-desktop skills get desktop
    agent-desktop skills get windows
+   ```
+
+---
+
+### Modern Web Guidance: hướng dẫn Web Platform hiện đại (Google Chrome)
+
+> **Khuyến nghị**: Rất nên cài nếu làm **Web / Frontend**. Bổ trợ trực tiếp cho `impeccable` (thẩm mỹ/UX) bằng chuẩn CSS, HTML và Web API gốc của trình duyệt.
+
+**Modern Web Guidance** (phát triển bởi đội ngũ Google Chrome cùng Edge, Firefox và MDN) khắc phục việc AI viết code web lỗi thời hoặc tự chế nhiều JavaScript/cài thêm thư viện thừa cho những thứ trình duyệt đã hỗ trợ sẵn (như `<dialog>`, Popover API, CSS Container Queries, Anchor Positioning, View Transitions...). AI tự tra cứu on-demand (~250 hướng dẫn CSS/layout, HTML/DOM, JS & Web API) đúng lúc đang code mà không nhồi toàn bộ vào context.
+
+1. **Cài đặt tự động qua CLI (Khuyến nghị):**
+   ```bash
+   npx modern-web-guidance@latest install
+   ```
+
+2. **Cài đặt qua Skills CLI (Codex / Antigravity):**
+   ```bash
+   npx skills add GoogleChrome/modern-web-guidance -a codex -g
+   npx skills add GoogleChrome/modern-web-guidance -a antigravity -g
+   ```
+
+3. **Hoặc cài trực tiếp cho từng Agent / CLI:**
+   ```bash
+   # Antigravity CLI
+   agy plugin install https://github.com/GoogleChrome/modern-web-guidance
+
+   # Claude Code
+   claude plugin marketplace add GoogleChrome/modern-web-guidance
+   claude plugin install modern-web-guidance@googlechrome
+   ```
+
+4. **Tra cứu nhanh hoặc quét code web cũ bằng CLI (không cần cài):**
+   ```bash
+   npx modern-web-guidance@latest search "animate a dialog modal backdrop"
+   npx modern-web-guidance@latest legacy-scan .
    ```
 
 ---
