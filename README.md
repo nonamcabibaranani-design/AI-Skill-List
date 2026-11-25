@@ -117,6 +117,7 @@ Chọn nguồn và skill cần dùng rồi cài trực tiếp từ upstream. Cá
 | [ECC (Everything Claude Code)](https://github.com/affaan-m/everything-claude-code) | Kho tham khảo mẫu: `database-reviewer`, `security-review`, `backend-patterns` | [README](https://github.com/affaan-m/everything-claude-code#readme) | 2026-10-30 |
 | [agent-desktop (Vercel Labs)](https://github.com/vercel-labs/agent-desktop) | `agent-desktop`, `agent-desktop-windows` (Computer Use cho AI qua OS Accessibility Tree, điều khiển GUI Desktop) | [README](https://github.com/vercel-labs/agent-desktop#readme) | 2026-11-05 |
 | [Modern Web Guidance (Google Chrome)](https://github.com/GoogleChrome/modern-web-guidance) | `modern-web-guidance` (Tra cứu ~250 tính năng Web Platform hiện đại: CSS, HTML/DOM, Web API cho Frontend) | [README](https://github.com/GoogleChrome/modern-web-guidance#readme) | 2026-11-25 |
+| [Anthropic Skills — DOCX](https://github.com/anthropics/skills/tree/main/skills/docx) | `docx` (Tạo, đọc, sửa file Word `.docx` chuẩn OOXML kèm Tracked Changes, Comments, gộp runs và XSD Validator chống hỏng file) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/docx/SKILL.md) · [AgenticSkills](https://agenticskills.io/skills/docx) | 2026-11-25 |
 
 ---
 
@@ -347,6 +348,32 @@ args = ["-y", "@playwright/mcp@latest"]
    npx modern-web-guidance@latest search "animate a dialog modal backdrop"
    npx modern-web-guidance@latest legacy-scan .
    ```
+
+---
+
+### Anthropic DOCX: tạo, sửa và kiểm định file Word (.docx) chuẩn OOXML
+
+Skill `docx` chính chủ từ kho [`anthropics/skills`](https://github.com/anthropics/skills/tree/main/skills/docx) (bộ gốc đứng sau tính năng xử lý tài liệu của Claude). Khác với các skill chỉ nhắc lý thuyết bằng prompt, gói này đi kèm sẵn dàn script Python xử lý trực tiếp cấu trúc OOXML và bộ XSD Schema chuẩn ISO/Microsoft chống vỡ file Word:
+
+- **Tạo mới chuẩn chỉnh (`docx-js`):** Kèm checklist tránh các lỗi kinh điển về khổ giấy DXA, bảng lệch cột trên Google Docs/LibreOffice, nền đen `ShadingType.SOLID`, mục lục TOC và đánh số tự động.
+- **Sửa file `.docx` có sẵn an toàn:** Có sẵn `merge_runs.py` gom các thẻ `<w:r>` bị Word cắt vụn (do spellcheck/rsid), `comment.py` tự nối chéo đủ 6 file XML cho Comments, và `accept_changes.py` cho Tracked Changes.
+- **Tự kiểm định XSD & giao diện thực tế:** `office/validate.py` đối chiếu hơn 30 file XSD (`--auto-repair`, kiểm tra sót redline với `--author`), kết hợp quy trình xuất PDF → ảnh (`soffice` + `pdftoppm`) để AI tự soi bố cục từng trang trước khi bàn giao.
+
+1. **Cài đặt qua Skills CLI:**
+   ```bash
+   # Cài dùng chung cho toàn bộ Agent trên máy (Antigravity, Codex, OpenClaw, Claude Code, Cursor...)
+   npx skills add anthropics/skills --skill docx -a '*' -g -y
+
+   # Hoặc cài lẻ cho từng Agent
+   npx skills add anthropics/skills --skill docx -a codex -g
+   npx skills add anthropics/skills --skill docx -a antigravity -g
+   ```
+
+2. **Cài đặt các công cụ phụ trợ (Runtime Dependencies):**
+   Skill phát huy 100% sức mạnh (tạo file, đọc nhanh, chạy validator XSD và tự soi ảnh trang) khi môi trường có đủ:
+   - **Node.js package `docx`:** `npm install -g docx` *(nhớ cấu hình `NODE_PATH` trỏ tới `node_modules` global nếu chạy script rời ngoài project)*.
+   - **Python packages (`lxml`, `defusedxml`):** `python3 -m pip install --user lxml defusedxml` *(phục vụ bộ `merge_runs.py`, `comment.py`, `validate.py`)*.
+   - **CLI hệ thống:** `pandoc` *(đọc nhanh `.docx` sang Markdown)*, `libreoffice` (`soffice`) và `pdftoppm` (`poppler-utils` — kết xuất trang Word ra ảnh để AI kiểm tra hiển thị).
 
 ---
 
