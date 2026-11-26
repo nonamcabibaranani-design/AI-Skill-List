@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orca Loop (Đức Anh)"
+  short_description: "Điều phối worker Orca có kiểm chứng thật, review độc lập & quy chuẩn code cá nhân (gọi thủ công)"
+  default_prompt: "Dùng $orca-loop: tự chọn chế độ task hoặc batch và profile phù hợp, điều phối worker code, kiểm chứng build/test thật, chạy ponytail-review + security-audit và báo cáo bằng chứng."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+RÀNG BUỘC CHUNG:
+- Sửa theo hunk đúng phạm vi yêu cầu (surgical changes), không chép đè toàn file, không tiện tay format/sửa code hoặc comment lân cận ngoài vùng sửa.
+- Không chạy `git checkout`, `git stash`, `git reset`, `git clean`, `git commit`, `git push`; không tự tạo PR.
+- Tài liệu SRS và quy tắc trong `.local-rules/` là nguồn chỉ đọc: cấm sửa, cấm redline, cấm stage hoặc commit `.local-rules/`.
+- Không tự xóa cache build (`Manual cache cleanup` — chỉ thực hiện khi nhiệm vụ yêu cầu rõ ràng).
+- Không revert hoặc format các file đã modified/untracked trước bước này (danh sách bên dưới) trừ khi nhiệm vụ yêu cầu rõ.
+- Không để lại file tạm ở root repo hoặc thư mục home người dùng (`C:\Users\ducanh` / `/home/ducanh`); dùng thư mục scratchpad của phiên hoặc thư mục temp của hệ thống (`%TEMP%` trên Windows, `/tmp` trên POSIX) nếu cần.

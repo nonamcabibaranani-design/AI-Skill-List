@@ -13,6 +13,7 @@ Danh mục skill và công cụ mở rộng (MCP) dùng cho các AI coding agent
 | `sql-query-tuning` | Tối ưu hóa Database & SQL (lấy cảm hứng từ ECC `database-reviewer`): Diệt triệt để N+1 queries, tối ưu hóa Indexing (Leftmost Prefix, Covering Index), Keyset pagination, tối giản Transaction. | [SKILL.md](skills/sql-query-tuning/SKILL.md) |
 | `security-audit` | Rà soát bảo mật & quét lỗ hổng theo chuẩn OWASP Top 10 và ECC AgentShield: Diệt SQL Injection, chống BOLA/IDOR (truy cập trái phép đối tượng), ngăn lộ lọt Secret/Credential, che mờ log dữ liệu nhạy cảm. | [SKILL.md](skills/security-audit/SKILL.md) |
 | `conventional-commits` | Quy chuẩn viết Git Commit Message theo chuẩn Conventional Commits 1.0.0 (`feat:`, `fix:`, `refactor:`, `perf:`, `chore:`...), cam kết commit nguyên tử (Atomic Commit), thể mệnh lệnh. | [SKILL.md](skills/conventional-commits/SKILL.md) |
+| `orca-loop` | Điều phối worker Orca đa nền tảng (chế độ `task` / `batch`) có kiểm chứng build/test thật, review độc lập 3 trục và quy chuẩn code cá nhân; chỉ kích hoạt thủ công khi gọi trực tiếp. | [SKILL.md](skills/orca-loop/SKILL.md) |
 
 ---
 
@@ -27,6 +28,7 @@ npx skills add nonamcabibaranani-design/AI-Skill-List --skill sql-query-tuning -
 npx skills add nonamcabibaranani-design/AI-Skill-List --skill security-audit -a codex -g
 npx skills add nonamcabibaranani-design/AI-Skill-List --skill conventional-commits -a codex -g
 npx skills add nonamcabibaranani-design/AI-Skill-List --skill ducanh-code-rule -a codex -g
+npx skills add nonamcabibaranani-design/AI-Skill-List --skill orca-loop -a codex -g
 ```
 
 > **Mẹo:** Thay `-a codex` bằng `-a antigravity` (hoặc `-a claude-code`, `-a cursor`). Bỏ `-g` nếu chỉ muốn cài riêng trong phạm vi project hiện tại.
