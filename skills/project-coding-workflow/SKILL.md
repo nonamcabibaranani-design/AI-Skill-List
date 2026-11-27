@@ -96,6 +96,7 @@ flowchart TD
   * **Secrets & Logs:** Không hardcode API key, không ghi log mật khẩu/token/thẻ tín dụng thô.
 * **Bằng chứng trước khi công bố (`verification-before-completion`):**
   * Chạy lệnh build / compile thực tế của dự án (`mvn test-compile`, `mvn compile`, `gradle build -x test`,...).
+  * Khi thay đổi hành vi của UI hoặc API, chạy luồng bị ảnh hưởng và đính kèm bằng chứng trong báo cáo bàn giao hoặc PR. Ghi bước tái hiện, kết quả mong đợi và kết quả thực tế. Dùng ảnh hoặc clip cho UI khi cần thấy giao diện hay thao tác, và kết quả test tích hợp hoặc phản hồi API đã che dữ liệu nhạy cảm cho backend. Nếu không chạy được luồng, ghi rõ điều kiện còn thiếu.
   * Chỉ khi lệnh kiểm tra trả về thành công (exit code 0) mới kết luận đã hoàn thành tác vụ.
 
 ### Bước 5: Chuẩn hóa Commit & Lưu giữ tri thức (Commit & Housekeeping)
